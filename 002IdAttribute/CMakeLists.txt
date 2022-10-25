@@ -1,0 +1,56 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(002IdAttribute VERSION 0.1 LANGUAGES CXX)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
+
+FIND_PACKAGE( OpenMP REQUIRED)
+if(OPENMP_FOUND)
+    message("OPENMP FOUND")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+
+
+message ( STATUS "OpenMP_FOUND    = ${OpenMP_FOUND}" )
+message ( STATUS "OpenMP_CXX_FOUND  = ${OpenMP_CXX_FOUND}" )
+message ( STATUS "OpenMP_CXX_FLAGS  = ${OpenMP_CXX_FLAGS}" )
+message ( STATUS "OpenMP_CXX_INCLUDE_DIRS  = ${OpenMP_CXX_INCLUDE_DIRS}" )
+message ( STATUS "OpenMP_CXX_LIB_NAMES  = ${OpenMP_CXX_LIB_NAMES}" )
+message ( STATUS "OpenMP_CXX_LIBRARIES  = ${OpenMP_CXX_LIBRARIES}" )
+message ( STATUS "OpenMP_LIBRARY  = ${OpenMP_LIBRARY}" )
+message ( STATUS "OpenMP_CXX_SPEC_DATE  = ${OpenMP_CXX_SPEC_DATE}" )
+message ( STATUS "OpenMP_CXX_VERSION_MAJOR  = ${OpenMP_CXX_VERSION_MAJOR}" )
+message ( STATUS "OpenMP_CXX_VERSION_MINOR  = ${OpenMP_CXX_VERSION_MINOR}" )
+message ( STATUS "OpenMP_CXX_VERSION  = ${OpenMP_CXX_VERSION}" )
+
+
+qt_add_executable(app002IdAttribute
+    main.cpp
+)
+
+qt_add_qml_module(app002IdAttribute
+    URI 002IdAttribute
+    VERSION 1.0
+    QML_FILES main.qml 
+)
+
+set_target_properties(app002IdAttribute PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+    LNIK_FLAGS "${OpenMP_CXX_FLAGS}"
+)
+
+target_link_libraries(app002IdAttribute
+    PRIVATE Qt6::Quick)
+
+install(TARGETS app002IdAttribute
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
