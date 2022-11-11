@@ -8,7 +8,9 @@ Window {
 
     Rectangle {
         //define signal
-        signal changeColor
+        signal changeColor(info : string, num : real)
+        //signal changeColor(int k) //error same name
+
         id: parentItem
         width: 300
         height: 200
@@ -17,9 +19,17 @@ Window {
 
         color: "red"
 
-        onChangeColor: function(){
+        onChangeColor: function(info){
             //color = "#777777";
             color = Qt.rgba(Math.random(),Math.random(), Math.random(), 1);
+            console.log(info)
+        }
+
+        function test(){
+            console.log('test...');
+        }
+
+        function test1(){
         }
 
         MouseArea {
@@ -27,8 +37,21 @@ Window {
 
             onClicked: function(){
                 //emit signal changeColor
-                parentItem.changeColor();
+                parentItem.changeColor('info', 2);
+                //parentItem.onChangeColor();   //TypeError: Property 'onChangeColor' of object QQuickRectangle_QML_0(0x20a51e8ca60) is not a function
+                //parentItem.test();
+
+                //parentItem.test = null;       //TypeError: Cannot assign to read-only property "test"
+                //parentItem.test();
             }
+
+            signal changeColor
+            onChangeColor: ()=>{
+                               console.log("change color in mouse area");
+                           }
         }
     }
 }
+
+
+
