@@ -20,12 +20,22 @@ Window {
             }
         }
 
+        TapHandler {
+            onTapped: console.log('second taphandler...');
+        }
+
         //js expression in signal handler
         Component.onCompleted: {
             color = Qt.binding(function() { return tapHandler.pressed ? "red" : "black";});
+
+            //connect js function
+            tapHandler.tapped.connect(MyTestJs.OnConnectSignal);
         }
     }
 
     //js expressioin in js file
-    Component.onCompleted: MyTestJs.Message();
+    Component.onCompleted: {
+        MyTestJs.Message();
+    }
+
 }
